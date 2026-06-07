@@ -42,6 +42,7 @@ def preprocess(credit_score, age, tenure, balance, products_number,
     from sklearn.preprocessing import MinMaxScaler
 
     # Encode inputs
+                   
     credit_card_val = 1 if credit_card == "Yes" else 0
     active_member_val = 1 if active_member == "Yes" else 0
     country_France = 1 if country == "France" else 0
@@ -51,15 +52,18 @@ def preprocess(credit_score, age, tenure, balance, products_number,
     gender_Male = 1 if gender == "Male" else 0
 
     # Normalize continuous features using same scale as training
+                   
     scaler = MinMaxScaler()
     continuous = np.array([[credit_score, age, balance, estimated_salary]])
     # Use approximate min/max from training data for scaling
+                   
     mins = np.array([350, 18, 0, 11.58])
     maxs = np.array([850, 92, 250898, 199992])
     normalized = (continuous - mins) / (maxs - mins)
     credit_score_n, age_n, balance_n, salary_n = normalized[0]
 
     # Build full feature dataframe matching training columns exactly
+                   
     input_data = pd.DataFrame([[
         credit_score_n, age_n, balance_n, salary_n,
         tenure, products_number, credit_card_val, active_member_val,
