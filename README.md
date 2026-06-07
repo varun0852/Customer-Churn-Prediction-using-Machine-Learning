@@ -1,198 +1,165 @@
-# Customer-Churn-Prediction-using-Machine-Learning
-# Bank Customer Churn Prediction using Machine Learning
+# 🏦 Customer Churn Prediction using Machine Learning
 
-## 📌 Overview
+An end-to-end machine learning project that predicts customer churn in a banking dataset using EDA, statistical feature selection, multi-model comparison, SMOTE oversampling, and GridSearchCV hyperparameter tuning.
 
-Customer churn is a major challenge in the banking industry, as retaining existing customers is often more cost-effective than acquiring new ones. This project leverages Machine Learning techniques to predict whether a customer is likely to leave a bank based on demographic, financial, and account-related attributes.
+---
 
-The project focuses on data preprocessing, exploratory data analysis (EDA), statistical feature analysis, feature engineering, and predictive modeling using Logistic Regression.
+## 📊 Model Results
+
+### Before SMOTE
+| Model               | Accuracy | Precision | Recall | F1 Score |
+|---------------------|----------|-----------|--------|----------|
+| Random Forest       | 83.71%   | 64.68%    | 42.23% | 51.10%   |
+| XGBoost             | 82.56%   | 59.42%    | 42.49% | 49.55%   |
+| Decision Tree       | 77.34%   | 44.12%    | 46.63% | 45.34%   |
+| Logistic Regression | 82.40%   | 65.03%    | 27.46% | 38.62%   |
+
+### After SMOTE
+| Model               | Accuracy | Precision | Recall | F1 Score |
+|---------------------|----------|-----------|--------|----------|
+| Random Forest       | 79.22%   | 48.66%    | 56.48% | 52.28%   |
+| XGBoost             | 80.10%   | 50.64%    | 51.30% | 50.94%   |
+| Logistic Regression | 70.50%   | 37.16%    | 67.10% | 47.83%   |
+| Decision Tree       | 74.20%   | 37.89%    | 43.78% | 40.62%   |
+
+### After GridSearchCV — Tuned Random Forest (Best Model)
+| Class    | Precision | Recall | F1 Score |
+|----------|-----------|--------|----------|
+| Retained | 0.89      | 0.85   | 0.87     |
+| Churned  | 0.49      | 0.57   | 0.53     |
+
+🏆 **Best Cross-Validation F1: 86.61%**
+⚙️ **Best Parameters:** `max_depth: 20, min_samples_leaf: 1, min_samples_split: 2, n_estimators: 200`
 
 ---
 
 ## 🎯 Objective
 
-The primary objective of this project is to develop a classification model capable of identifying customers who are likely to churn, enabling banks to take proactive retention measures.
-
-Target Variable:
-
-* **0** → Customer Retained
-* **1** → Customer Churned
+Predict whether a bank customer will churn (leave the bank) based on demographic and account features — enabling proactive retention strategies that save revenue.
 
 ---
 
-## 📊 Dataset Description
+## 📁 Dataset
 
-The dataset contains customer information such as:
-
-| Feature          | Description                     |
-| ---------------- | ------------------------------- |
-| Credit Score     | Customer credit score           |
-| Country          | Customer's country              |
-| Gender           | Male/Female                     |
-| Age              | Customer age                    |
-| Tenure           | Years with the bank             |
-| Balance          | Account balance                 |
-| Products Number  | Number of banking products used |
-| Credit Card      | Credit card ownership status    |
-| Active Member    | Customer activity status        |
-| Estimated Salary | Annual estimated salary         |
-| Churn            | Target variable                 |
+- **Size:** ~7,000 records
+- **Target:** Churn (1 = churned, 0 = retained)
+- **Features:** Age, Balance, Credit Score, Geography, Gender, Tenure, Number of Products, Active Member, Estimated Salary
 
 ---
 
 ## ⚙️ Project Workflow
 
-### 1. Data Understanding
-
-* Loaded and inspected the dataset.
-* Examined data types and missing values.
-* Analyzed target variable distribution.
-
-### 2. Exploratory Data Analysis (EDA)
-
-Performed extensive visualization and analysis using:
-
-* Count Plots
-* Histograms
-* Distribution Plots
-* Box Plots
-* Correlation Analysis
-
-Key insights were extracted regarding customer demographics, account balance, age distribution, and churn behavior.
-
-### 3. Data Preprocessing
-
-Implemented the following preprocessing techniques:
-
-* Removal of unnecessary identifiers (`customer_id`)
-* Handling of categorical variables
-* One-Hot Encoding
-* Feature Scaling using MinMaxScaler
-* Outlier Detection and Removal using the IQR Method
-
-### 4. Statistical Feature Analysis
-
-Applied statistical methods to evaluate feature significance:
-
-* Chi-Square Test (`chi2_contingency`)
-* ANOVA Test (`f_oneway`)
-
-These techniques helped identify features with strong relationships to customer churn.
-
-### 5. Feature Selection
-
-Implemented Sequential Feature Selection (SFS) to identify the most relevant features for model training.
-
-### 6. Model Development
-
-Built a Machine Learning classification model using:
-
-* Logistic Regression
-
-The model was trained on preprocessed data and optimized using hyperparameter tuning techniques.
-
-### 7. Model Evaluation
-
-Model performance was evaluated using:
-
-* Accuracy Score
-* Confusion Matrix
-* Classification Report
-* Precision
-* Recall
-* F1 Score
+```
+Data Loading & Exploration
+        ↓
+Exploratory Data Analysis (EDA)
+(distributions, correlations, class imbalance check)
+        ↓
+Statistical Feature Testing
+(Chi-Square for categorical, ANOVA for numerical)
+        ↓
+Data Preprocessing
+(Label encoding, MinMaxScaler, IQR outlier removal)
+        ↓
+Feature Selection
+(Sequential Feature Selector — top 7 features)
+        ↓
+Model Training & Comparison
+(Logistic Regression, Decision Tree, Random Forest, XGBoost)
+        ↓
+SMOTE Oversampling
+(Fix class imbalance — boosted Recall from 42% → 56%)
+        ↓
+GridSearchCV Hyperparameter Tuning
+(Tuned Random Forest — Best CV F1: 86.61%)
+```
 
 ---
 
-## 🛠️ Technologies Used
+## 📈 Visualizations
 
-### Programming Language
+### Model Comparison Chart
+![Model Comparison](model_comparision.png)
 
-* Python
+### Confusion Matrix — Tuned Random Forest
+![Confusion Matrix](confusion_matrix.png)
 
-### Libraries
-
-* Pandas
-* NumPy
-* Matplotlib
-* Seaborn
-* Scikit-Learn
-* SciPy
-* Mlxtend
-
-### Development Environment
-
-* Jupyter Notebook
+### Top 10 Feature Importances
+![Feature Importance](feature_importance.png)
 
 ---
 
-## 🔍 Machine Learning Techniques Applied
+## 🔑 Key Findings
 
-* Exploratory Data Analysis (EDA)
-* Outlier Detection & Removal
-* Feature Scaling
-* One-Hot Encoding
-* Statistical Hypothesis Testing
-* Sequential Feature Selection
-* Logistic Regression
-* Hyperparameter Optimization
-* Model Evaluation
+- **SMOTE significantly improved Recall** — Random Forest Recall jumped from 42.23% → 56.48%
+- **Logistic Regression** saw the biggest Recall boost: 27.46% → 67.10% after SMOTE
+- **Tuned Random Forest** achieved best cross-validation F1 of **86.61%** via GridSearchCV
+- **Top churn predictors:** Age, Balance, Active Member status, Country_Germany
+- Without SMOTE, all models were heavily biased toward predicting "Retained"
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer             | Technology                         |
+|-------------------|------------------------------------|
+| Language          | Python 3.10+                       |
+| Data Processing   | Pandas, NumPy                      |
+| Visualization     | Matplotlib, Seaborn                |
+| ML Models         | Scikit-learn, XGBoost              |
+| Oversampling      | imbalanced-learn (SMOTE)           |
+| Hyperparameter    | GridSearchCV (Scikit-learn)        |
+| Feature Selection | Sequential Feature Selector        |
+| Statistical Tests | Chi-Square, ANOVA (SciPy)         |
+| Environment       | Google Colab / Jupyter Notebook    |
 
 ---
 
 ## 📁 Project Structure
 
-```text
-Bank-Customer-Churn-Prediction/
-│
-├── Customer_Churn.ipynb
-├── README.md
-├── dataset.csv
-└── requirements.txt
+```
+Customer-Churn-Prediction-using-Machine-Learning/
+├── customer_churn_prediction.ipynb   # Full notebook: EDA + modelling + SMOTE + GridSearchCV
+├── model_comparision.png             # Bar chart comparing all 4 models
+├── confusion_matrix.png              # Confusion matrix for Tuned Random Forest
+├── feature_importance.png            # Top 10 feature importances
+└── README.md
 ```
 
 ---
 
-## 📈 Results
+## 🚀 How to Run
 
-The developed Logistic Regression model successfully identifies patterns associated with customer churn by analyzing customer demographics and financial behavior.
+**1. Clone the repo**
+```bash
+git clone https://github.com/varun0852/Customer-Churn-Prediction-using-Machine-Learning.git
+cd Customer-Churn-Prediction-using-Machine-Learning
+```
 
-Key outcomes:
+**2. Install dependencies**
+```bash
+pip install pandas numpy matplotlib seaborn scikit-learn xgboost scipy imbalanced-learn jupyter
+```
 
-* Identified important factors influencing churn.
-* Improved data quality through preprocessing and outlier removal.
-* Applied statistical analysis to validate feature importance.
-* Built an interpretable classification model for churn prediction.
-
----
-
-## 🚀 Future Improvements
-
-* Implement Random Forest and XGBoost models
-* Compare multiple classification algorithms
-* Deploy the model using Streamlit
-* Add SHAP-based explainability
-* Build a real-time prediction API using FastAPI
-* Integrate model monitoring and performance tracking
+**3. Launch the notebook**
+```bash
+jupyter notebook customer_churn_prediction.ipynb
+```
 
 ---
 
-## 💡 Business Impact
+## 🔮 Next Steps
 
-Accurate churn prediction enables banks to:
-
-* Improve customer retention
-* Reduce revenue loss
-* Design targeted retention campaigns
-* Enhance customer satisfaction
-* Make data-driven business decisions
+- Deploy Tuned Random Forest via Streamlit dashboard
+- Try ensemble stacking of RF + XGBoost
+- Experiment with threshold tuning to further improve Churned class F1
 
 ---
 
-## 👨‍💻 Author
+## 👤 Author
 
-**Varun**
+**Varun Diwakar** — AI/ML Engineer
 
-GitHub: https://github.com/varun0852
-
-If you found this project useful, consider giving it a ⭐ on GitHub.
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/varun-diwakar-a87781274)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/varun0852)
+[![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:diwakarvarun752@gmail.com)
