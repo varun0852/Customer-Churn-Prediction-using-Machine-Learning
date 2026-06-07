@@ -87,4 +87,4 @@ if st.button("🔍 Predict Churn", use_container_width=True):
         st.metric("Churn Probability", f"{probability[1]*100:.1f}%")
 
 st.divider()
-st.markdown("**Model:** XGBoost + SMOTE | **Built by:** [Varun Diwakar](https://github.com/varun0852)")
+st.markdown("**Model:** XGBoost + SMOTE | **Built by:** [Varun](https://github.com/varun0852)")
