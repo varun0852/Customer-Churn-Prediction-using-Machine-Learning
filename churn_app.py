@@ -1,18 +1,18 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import pickle
+from xgboost import XGBClassifier
 
 @st.cache_resource
 def load_model():
-    with open("model.pkl", "rb") as f:
-        model = pickle.load(f)
+    model = XGBClassifier()
+    model.load_model("model.json")
     return model
 
 st.set_page_config(page_title="Customer Churn Predictor", page_icon="🏦", layout="centered")
 
 st.title("🏦 Customer Churn Predictor")
-st.markdown("Predict whether a bank customer will churn using a **Tuned Random Forest** model (GridSearchCV, CV F1: 86.61%)")
+st.markdown("Predict whether a bank customer will churn using an **XGBoost** model trained with SMOTE balancing.")
 st.divider()
 
 st.subheader("Enter Customer Details")
@@ -39,10 +39,6 @@ st.divider()
 def preprocess(credit_score, age, tenure, balance, products_number,
                credit_card, active_member, estimated_salary, country, gender):
 
-    from sklearn.preprocessing import MinMaxScaler
-
-    # Encode inputs
-                   
     credit_card_val = 1 if credit_card == "Yes" else 0
     active_member_val = 1 if active_member == "Yes" else 0
     country_France = 1 if country == "France" else 0
@@ -51,19 +47,14 @@ def preprocess(credit_score, age, tenure, balance, products_number,
     gender_Female = 1 if gender == "Female" else 0
     gender_Male = 1 if gender == "Male" else 0
 
-    # Normalize continuous features using same scale as training
-                   
-    scaler = MinMaxScaler()
-    continuous = np.array([[credit_score, age, balance, estimated_salary]])
-    # Use approximate min/max from training data for scaling
+    # Normalize continuous features same as training (MinMaxScaler range)
                    
     mins = np.array([350, 18, 0, 11.58])
     maxs = np.array([850, 92, 250898, 199992])
+    continuous = np.array([credit_score, age, balance, estimated_salary], dtype=float)
     normalized = (continuous - mins) / (maxs - mins)
-    credit_score_n, age_n, balance_n, salary_n = normalized[0]
+    credit_score_n, age_n, balance_n, salary_n = normalized
 
-    # Build full feature dataframe matching training columns exactly
-                   
     input_data = pd.DataFrame([[
         credit_score_n, age_n, balance_n, salary_n,
         tenure, products_number, credit_card_val, active_member_val,
@@ -100,4 +91,4 @@ if st.button("🔍 Predict Churn", use_container_width=True):
         st.metric("Churn Probability", f"{probability[1]*100:.1f}%")
 
 st.divider()
-st.markdown("**Model:** Tuned Random Forest | **Best CV F1:** 86.61% | **Built by:** [Varun Diwakar](https://github.com/varun0852)")
+st.markdown("**Model:** XGBoost + SMOTE | **Built by:** [Varun Diwakar](https://github.com/varun0852)")
