@@ -3,8 +3,6 @@ import pandas as pd
 import numpy as np
 import pickle
 
-# Load model and vectorizer
-
 @st.cache_resource
 def load_model():
     with open("model.pkl", "rb") as f:
@@ -14,10 +12,8 @@ def load_model():
 st.set_page_config(page_title="Customer Churn Predictor", page_icon="🏦", layout="centered")
 
 st.title("🏦 Customer Churn Predictor")
-st.markdown("Predict whether a bank customer will churn using a **Tuned Random Forest** model (GridSearchCV, F1: 86.61%)")
+st.markdown("Predict whether a bank customer will churn using a **Tuned Random Forest** model (GridSearchCV, CV F1: 86.61%)")
 st.divider()
-
-# Input form
 
 st.subheader("Enter Customer Details")
 
@@ -40,63 +36,64 @@ gender = st.selectbox("Gender", ["Male", "Female"])
 
 st.divider()
 
-# Preprocess input
-
 def preprocess(credit_score, age, tenure, balance, products_number,
                credit_card, active_member, estimated_salary, country, gender):
+
     from sklearn.preprocessing import MinMaxScaler
 
-    credit_card = 1 if credit_card == "Yes" else 0
-    active_member = 1 if active_member == "Yes" else 0
+    # Encode inputs
+    credit_card_val = 1 if credit_card == "Yes" else 0
+    active_member_val = 1 if active_member == "Yes" else 0
     country_France = 1 if country == "France" else 0
     country_Germany = 1 if country == "Germany" else 0
     country_Spain = 1 if country == "Spain" else 0
     gender_Female = 1 if gender == "Female" else 0
     gender_Male = 1 if gender == "Male" else 0
 
-    # Use the same 7 features selected by Sequential Feature Selector
-    # Features: age, estimated_salary, tenure, products_number, active_member, country_Germany, gender_Female
+    # Normalize continuous features using same scale as training
+    scaler = MinMaxScaler()
+    continuous = np.array([[credit_score, age, balance, estimated_salary]])
+    # Use approximate min/max from training data for scaling
+    mins = np.array([350, 18, 0, 11.58])
+    maxs = np.array([850, 92, 250898, 199992])
+    normalized = (continuous - mins) / (maxs - mins)
+    credit_score_n, age_n, balance_n, salary_n = normalized[0]
 
+    # Build full feature dataframe matching training columns exactly
+    input_data = pd.DataFrame([[
+        credit_score_n, age_n, balance_n, salary_n,
+        tenure, products_number, credit_card_val, active_member_val,
+        country_France, country_Germany, country_Spain,
+        gender_Female, gender_Male
+    ]], columns=[
+        "credit_score", "age", "balance", "estimated_salary",
+        "tenure", "products_number", "credit_card", "active_member",
+        "country_France", "country_Germany", "country_Spain",
+        "gender_Female", "gender_Male"
+    ])
 
-    input_data = pd.DataFrame([[age, estimated_salary, tenure, products_number,
-                                 active_member, country_Germany, gender_Female]],
-                               columns=["age", "estimated_salary", "tenure", "products_number",
-                                        "active_member", "country_Germany", "gender_Female"])
     return input_data
 
 if st.button("🔍 Predict Churn", use_container_width=True):
-    try:
-        model = load_model()
-        input_df = preprocess(credit_score, age, tenure, balance, products_number,
-                              credit_card, active_member, estimated_salary, country, gender)
+    model = load_model()
+    input_df = preprocess(credit_score, age, tenure, balance, products_number,
+                          credit_card, active_member, estimated_salary, country, gender)
 
-        prediction = model.predict(input_df)[0]
-        probability = model.predict_proba(input_df)[0]
+    prediction = model.predict(input_df)[0]
+    probability = model.predict_proba(input_df)[0]
 
-        st.divider()
+    st.divider()
 
-        if prediction == 1:
-            st.error("⚠️ High Churn Risk — This customer is likely to leave")
-            st.metric("Churn Probability", f"{probability[1]*100:.1f}%")
-        else:
-            st.success("✅ Low Churn Risk — This customer is likely to stay")
-            st.metric("Retention Probability", f"{probability[0]*100:.1f}%")
+    if prediction == 1:
+        st.error("⚠️ High Churn Risk — This customer is likely to leave")
+    else:
+        st.success("✅ Low Churn Risk — This customer is likely to stay")
 
-        col1, col2 = st.columns(2)
-        with col1:
-            st.metric("Stay Probability", f"{probability[0]*100:.1f}%")
-        with col2:
-            st.metric("Churn Probability", f"{probability[1]*100:.1f}%")
-
-    except FileNotFoundError:
-        st.warning("⚠️ model.pkl not found. Please export and save your trained model first (see instructions below).")
-        st.code("""
-# Run this in your Colab notebook to save the model:
-import pickle
-with open("model.pkl", "wb") as f:
-    pickle.dump(best_rf_tuned, f)
-# Then download model.pkl from Colab files panel
-        """)
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("Stay Probability", f"{probability[0]*100:.1f}%")
+    with col2:
+        st.metric("Churn Probability", f"{probability[1]*100:.1f}%")
 
 st.divider()
-st.markdown("**Model:** Tuned Random Forest | **Best CV F1:** 86.61% | **Built by:** [Varun](https://github.com/varun0852)")
+st.markdown("**Model:** Tuned Random Forest | **Best CV F1:** 86.61% | **Built by:** [Varun Diwakar](https://github.com/varun0852)")
