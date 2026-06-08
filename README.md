@@ -1,6 +1,16 @@
 # 🏦 Customer Churn Prediction using Machine Learning
 
-An end-to-end machine learning project that predicts customer churn in a banking dataset using EDA, statistical feature selection, multi-model comparison, SMOTE oversampling, and GridSearchCV hyperparameter tuning.
+An end-to-end machine learning project that predicts customer churn in a banking dataset — featuring full EDA, statistical feature selection, multi-model comparison, SMOTE oversampling, GridSearchCV tuning, and a live Streamlit deployment.
+
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://customer-churn-prediction-using-machine-learning-j2tfig8zqn3gv.streamlit.app/)
+
+---
+
+## 🚀 Live Demo
+
+🔗 **[Try the app here](https://customer-churn-prediction-using-machine-learning-j2tfig8zqn3gv.streamlit.app/)**
+
+Enter customer details → Get instant churn prediction + probability score
 
 ---
 
@@ -22,14 +32,14 @@ An end-to-end machine learning project that predicts customer churn in a banking
 | Logistic Regression | 70.50%   | 37.16%    | 67.10% | 47.83%   |
 | Decision Tree       | 74.20%   | 37.89%    | 43.78% | 40.62%   |
 
-### After GridSearchCV — Tuned Random Forest (Best Model)
+### After GridSearchCV — Tuned Random Forest
 | Class    | Precision | Recall | F1 Score |
 |----------|-----------|--------|----------|
 | Retained | 0.89      | 0.85   | 0.87     |
 | Churned  | 0.49      | 0.57   | 0.53     |
 
 🏆 **Best Cross-Validation F1: 86.61%**
-⚙️ **Best Parameters:** `max_depth: 20, min_samples_leaf: 1, min_samples_split: 2, n_estimators: 200`
+⚙️ **Best Params:** `max_depth: 20, min_samples_leaf: 1, min_samples_split: 2, n_estimators: 200`
 
 ---
 
@@ -62,7 +72,7 @@ Data Preprocessing
 (Label encoding, MinMaxScaler, IQR outlier removal)
         ↓
 Feature Selection
-(Sequential Feature Selector — top 7 features)
+(Sequential Feature Selector — top 9 features)
         ↓
 Model Training & Comparison
 (Logistic Regression, Decision Tree, Random Forest, XGBoost)
@@ -72,6 +82,9 @@ SMOTE Oversampling
         ↓
 GridSearchCV Hyperparameter Tuning
 (Tuned Random Forest — Best CV F1: 86.61%)
+        ↓
+Streamlit Deployment
+(Live app with real-time churn prediction)
 ```
 
 ---
@@ -94,8 +107,8 @@ GridSearchCV Hyperparameter Tuning
 - **SMOTE significantly improved Recall** — Random Forest Recall jumped from 42.23% → 56.48%
 - **Logistic Regression** saw the biggest Recall boost: 27.46% → 67.10% after SMOTE
 - **Tuned Random Forest** achieved best cross-validation F1 of **86.61%** via GridSearchCV
-- **Top churn predictors:** Age, Balance, Active Member status, Country_Germany
-- Without SMOTE, all models were heavily biased toward predicting "Retained"
+- Without SMOTE all models were heavily biased toward predicting "Retained"
+- **Top churn predictors:** Age, Estimated Salary, Active Member status, Country (Germany)
 
 ---
 
@@ -110,8 +123,9 @@ GridSearchCV Hyperparameter Tuning
 | Oversampling      | imbalanced-learn (SMOTE)           |
 | Hyperparameter    | GridSearchCV (Scikit-learn)        |
 | Feature Selection | Sequential Feature Selector        |
-| Statistical Tests | Chi-Square, ANOVA (SciPy)         |
-| Environment       | Google Colab / Jupyter Notebook    |
+| Statistical Tests | Chi-Square, ANOVA (SciPy)          |
+| Deployment        | Streamlit Cloud                    |
+| Environment       | Google Colab                       |
 
 ---
 
@@ -120,6 +134,9 @@ GridSearchCV Hyperparameter Tuning
 ```
 Customer-Churn-Prediction-using-Machine-Learning/
 ├── customer_churn_prediction.ipynb   # Full notebook: EDA + modelling + SMOTE + GridSearchCV
+├── churn_app.py                      # Streamlit deployment app
+├── model.json                        # Trained XGBoost model (native format, 452KB)
+├── requirements.txt                  # Python dependencies
 ├── model_comparision.png             # Bar chart comparing all 4 models
 ├── confusion_matrix.png              # Confusion matrix for Tuned Random Forest
 ├── feature_importance.png            # Top 10 feature importances
@@ -128,7 +145,7 @@ Customer-Churn-Prediction-using-Machine-Learning/
 
 ---
 
-## 🚀 How to Run
+## 🚀 Run Locally
 
 **1. Clone the repo**
 ```bash
@@ -138,21 +155,18 @@ cd Customer-Churn-Prediction-using-Machine-Learning
 
 **2. Install dependencies**
 ```bash
-pip install pandas numpy matplotlib seaborn scikit-learn xgboost scipy imbalanced-learn jupyter
+pip install -r requirements.txt
 ```
 
-**3. Launch the notebook**
+**3. Run the Streamlit app**
+```bash
+streamlit run churn_app.py
+```
+
+**4. Or run the notebook**
 ```bash
 jupyter notebook customer_churn_prediction.ipynb
 ```
-
----
-
-## 🔮 Next Steps
-
-- Deploy Tuned Random Forest via Streamlit dashboard
-- Try ensemble stacking of RF + XGBoost
-- Experiment with threshold tuning to further improve Churned class F1
 
 ---
 
