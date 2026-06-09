@@ -1,6 +1,6 @@
 # 🏦 Customer Churn Prediction using Machine Learning
 
-An end-to-end machine learning project that predicts customer churn in a banking dataset — featuring full EDA, statistical feature selection, multi-model comparison, SMOTE oversampling, GridSearchCV tuning, and a live Streamlit deployment.
+An end-to-end machine learning project that predicts customer churn in a banking dataset — featuring full EDA, statistical feature selection, multi-model comparison, SMOTE oversampling, GridSearchCV hyperparameter tuning, and a live Streamlit deployment.
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://customer-churn-prediction-using-machine-learning-j2tfig8zqn3gv.streamlit.app/)
 
@@ -8,7 +8,7 @@ An end-to-end machine learning project that predicts customer churn in a banking
 
 ## 🚀 Live Demo
 
-🔗 **[Try the app here](https://customer-churn-prediction-using-machine-learning-j2tfig8zqn3gv.streamlit.app/)**
+🔗 **[Try the live app here](https://customer-churn-prediction-using-machine-learning-j2tfig8zqn3gv.streamlit.app/)**
 
 Enter customer details → Get instant churn prediction + probability score
 
@@ -19,7 +19,7 @@ Enter customer details → Get instant churn prediction + probability score
 ### Before SMOTE
 | Model               | Accuracy | Precision | Recall | F1 Score |
 |---------------------|----------|-----------|--------|----------|
-| Random Forest       | 83.71%   | 64.68%    | 42.23% | 51.10%   |
+| **Random Forest**   | **83.71%** | **64.68%** | 42.23% | **51.10%** |
 | XGBoost             | 82.56%   | 59.42%    | 42.49% | 49.55%   |
 | Decision Tree       | 77.34%   | 44.12%    | 46.63% | 45.34%   |
 | Logistic Regression | 82.40%   | 65.03%    | 27.46% | 38.62%   |
@@ -32,14 +32,14 @@ Enter customer details → Get instant churn prediction + probability score
 | Logistic Regression | 70.50%   | 37.16%    | 67.10% | 47.83%   |
 | Decision Tree       | 74.20%   | 37.89%    | 43.78% | 40.62%   |
 
-### After GridSearchCV — Tuned Random Forest
+### After GridSearchCV — Tuned Random Forest (Best Model)
 | Class    | Precision | Recall | F1 Score |
 |----------|-----------|--------|----------|
 | Retained | 0.89      | 0.85   | 0.87     |
 | Churned  | 0.49      | 0.57   | 0.53     |
 
 🏆 **Best Cross-Validation F1: 86.61%**
-⚙️ **Best Params:** `max_depth: 20, min_samples_leaf: 1, min_samples_split: 2, n_estimators: 200`
+⚙️ **Best Parameters:** `max_depth: 20, min_samples_leaf: 1, min_samples_split: 2, n_estimators: 200`
 
 ---
 
@@ -170,10 +170,18 @@ jupyter notebook customer_churn_prediction.ipynb
 
 ---
 
+## 🔮 Next Steps
+
+- Try ensemble stacking of RF + XGBoost
+- Experiment with threshold tuning to further improve Churned class F1
+- Add SHAP explainability to the Streamlit app
+
+---
+
 ## 👤 Author
 
-**Varun** — AI/ML Engineer
+**Varun Diwakar** — AI/ML Engineer
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/varun-a87781274/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/varun-diwakar-a87781274)
 [![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/varun0852)
 [![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:diwakarvarun752@gmail.com)
